@@ -3,7 +3,7 @@ var Mongoose = require("mongoose");
 var Schema = Mongoose.Schema;
 
 var UserSchema = new Schema({
-  id: Schema.Types.ObjectId,
+  id: Number,
   username: String,
   password: String,
 });
