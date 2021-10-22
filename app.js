@@ -1,7 +1,8 @@
 const express = require("express");
 const Mongoose = require("mongoose");
-const routes = require("./routes/routes");
 const cors = require("cors");
+const dotenv = require("dotenv");
+const routes = require("./routes/routes");
 
 const corsOptions = {
   origin: "http://localhost:3000",
@@ -9,26 +10,19 @@ const corsOptions = {
   optionSuccessStatus: 200,
 };
 
+dotenv.config();
 const app = express();
-const connectionString = "mongodb://127.0.0.1:27017/ems";
 
 app.use(cors(corsOptions));
-// app.use(function (req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "https://localhost:3000"); // update to match the domain you will make the request from
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   next();
-// });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-Mongoose.connect(connectionString)
+Mongoose.connect(process.env.CONNECTION_STRING)
   .then(() => {
-    console.log("MongoDatabase Connected.");
+    console.log("Mongo Database Connected.");
   })
-  .catch((error) => handleError(error));
+  .catch((error) => {
+    console.log("Mongo Failed to Connect...\n", error);
+  });
 
 app.use("/", routes);
 
